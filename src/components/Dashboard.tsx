@@ -10,6 +10,7 @@ export default function Dashboard() {
     } else {
       // Default initial data if localStorage is totally empty
       return [
+        { id: "DLV-9999", destination: "Accra Digital Hub", status: "In Transit", driver: "Isaac B." },
         { id: "DLV-8942", destination: "102 Oak St, Metropolis", status: "In Transit", driver: "Alex M." },
         { id: "DLV-8943", destination: "742 Evergreen Terr", status: "Pending", driver: "Sarah T." },
         { id: "DLV-8944", destination: "555 California St", status: "Delivered", driver: "James K." },
@@ -26,6 +27,11 @@ export default function Dashboard() {
   useEffect(() => {
     localStorage.setItem('hub_deliveries', JSON.stringify(deliveries));
   }, [deliveries]);
+  
+  const handleClearStorage = () => {
+    localStorage.removeItem('hub_deliveries');
+    window.location.reload(); // This reloads the page automatically!
+  };
 
   const handleAddShipment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,8 +71,9 @@ export default function Dashboard() {
   );
 
   // Mock data for our top metrics boxes
+  // Find this section in your stats array and change the first line:
   const stats = [
-    { title: "Active Deliveries", value: "18", icon: Truck, color: "text-blue-600", bg: "bg-blue-50" },
+    { title: "Active Deliveries", value: "18", icon: Truck, color: "text-teal-600", bg: "bg-teal-50" }, 
     { title: "Pending Orders", value: "7", icon: Clock, color: "text-amber-600", bg: "bg-amber-50" },
     { title: "Completed Today", value: "142", icon: CheckCircle, color: "text-emerald-600", bg: "bg-emerald-50" },
     { title: "Fleet Efficiency", value: "94%", icon: TrendingUp, color: "text-purple-600", bg: "bg-purple-50" },
@@ -75,9 +82,17 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-slate-50 p-6 text-slate-800">
       {/* Dashboard Header */}
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Delivery Hub System</h1>
-        <p className="text-sm text-slate-500">Real-time logistics and fleet management tracking.</p>
+      <header className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Delivery Hub System</h1>
+          <p className="text-sm text-slate-500">Real-time logistics and fleet management tracking.</p>
+        </div>
+        <button 
+          onClick={handleClearStorage}
+          className="text-xs bg-red-50 hover:bg-red-100 text-red-600 font-medium px-4 py-2 rounded-lg border border-red-200 transition-colors"
+        >
+          Reset All Data
+        </button>
       </header>
 
       {/* Metrics Grid */}
@@ -101,7 +116,7 @@ export default function Dashboard() {
       {/* New Shipment Form */}
       <div className="rounded-xl bg-white p-6 shadow-sm border border-slate-100 mb-8">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <PlusCircle size={18} className="text-blue-500" /> Dispatch New Shipment
+          <PlusCircle size={18} className="text-teal-500" /> Dispatch New Shipment
         </h2>
         <form onSubmit={handleAddShipment} className="flex flex-col gap-4 sm:flex-row sm:items-end">
           <div className="flex-1">
@@ -111,7 +126,7 @@ export default function Dashboard() {
               placeholder="e.g. 123 Main St, New York" 
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 p-2.5 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="w-full rounded-lg border border-slate-200 p-2.5 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
             />
           </div>
           <div className="flex-1">
@@ -121,12 +136,12 @@ export default function Dashboard() {
               placeholder="e.g. Marcus V." 
               value={driver}
               onChange={(e) => setDriver(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 p-2.5 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="w-full rounded-lg border border-slate-200 p-2.5 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
             />
           </div>
           <button 
             type="submit"
-            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
           >
             Add Shipment
           </button>
@@ -172,14 +187,14 @@ export default function Dashboard() {
                     </td>
                     <td className="px-4 py-3">{delivery.driver}</td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                        delivery.status === 'Delivered' ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/10' :
-                        delivery.status === 'In Transit' ? 'bg-blue-50 text-blue-700 ring-blue-600/10' :
-                        'bg-amber-50 text-amber-700 ring-amber-600/10'
-                      }`}>
-                        {delivery.status}
-                      </span>
-                    </td>
+                    <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
+                      delivery.status === 'Delivered' ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/10' :
+                      delivery.status === 'In Transit' ? 'bg-teal-50 text-teal-700 ring-teal-600/10' :
+                      'bg-amber-50 text-amber-700 ring-amber-600/10'
+                    }`}>
+                      {delivery.status}
+                    </span>
+                  </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
                         {delivery.status !== 'Delivered' && (
